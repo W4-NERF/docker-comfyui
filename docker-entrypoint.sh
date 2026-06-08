@@ -14,19 +14,25 @@ chown -R comfyui:comfyui "${COMFYUI_DIR}"
 # Install / update ComfyUI Manager
 if [ ! -d "$MANAGER_DIR/.git" ]; then
     echo "[entrypoint] Installing ComfyUI Manager..."
-    sudo -u comfyui git clone --depth 1 \
+    gosu comfyui git clone --depth 1 \
         https://github.com/ltdrdata/ComfyUI-Manager.git "$MANAGER_DIR"
 fi
+
 # Always ensure dependencies are installed (survives image rebuilds)
-sudo -u comfyui pip install --no-cache-dir -r "$MANAGER_DIR/requirements.txt" 2>/dev/null || true
+gosu comfyui pip install --no-cache-dir -r "$MANAGER_DIR/requirements.txt" 2>/dev/null || true
+
 # Ensure openai-agents is available for ComfyUI-Copilot (survives container recreation)
-sudo -u comfyui pip install --no-cache-dir openai-agents 2>/dev/null || true
+gosu comfyui pip install --no-cache-dir openai-agents 2>/dev/null || true
 
 # Seed Manager config so missing-nodes detection works immediately
 MANAGER_STORE="${COMFYUI_DIR}/user_data/__manager"
 if [ ! -f "$MANAGER_STORE/config.ini" ]; then
     echo "[entrypoint] Creating default ComfyUI-Manager config..."
     mkdir -p "$MANAGER_STORE"
+    # security_level = normal lets you install nodes from the UI. Fine while the
+    # port is bound to localhost. If you ever expose the UI on a network, tighten
+    # this (e.g. normal- or strong) — check current ComfyUI-Manager docs for the
+    # exact level semantics, they've changed across versions.
     cat > "$MANAGER_STORE/config.ini" <<'INI'
 [default]
 network_mode = public
@@ -43,7 +49,9 @@ INI
 fi
 
 echo "[entrypoint] Starting ComfyUI..."
-exec sudo -u comfyui python /comfyui/main.py \
+# --listen 0.0.0.0 is correct here: it binds *inside* the container so Docker's
+# port mapping works. Host-side exposure is controlled by BIND_ADDR in compose.
+exec gosu comfyui python /comfyui/main.py \
     --listen 0.0.0.0 \
     --port 8188 \
     $COMFYUI_EXTRA_ARGS
