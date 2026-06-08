@@ -22,6 +22,7 @@ ComfyUI will be available at `http://localhost:8188`.
 ## Requirements
 
 - Docker with `nvidia-container-toolkit` installed
+- `docker compose` (or `docker-compose`)
 - NVIDIA GPU with proprietary drivers
 - At least 16GB VRAM recommended (for large FLUX/ACE models)
 
