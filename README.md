@@ -55,6 +55,20 @@ Edit `.env` to set:
 | `COMFYUI_UID` / `COMFYUI_GID` | `1000` | Container user/group |
 | `MODELS_PATH` | `./data/models` | Host model directory |
 | `OUTPUT_PATH` | `./data/output` | Host output directory |
+| `BIND_ADDR` | `127.0.0.1` | Host interface (set `0.0.0.0` to expose on LAN) |
+| `CUDA_VARIANT` | `cu128` | PyTorch wheel tag — see below |
+
+### PyTorch / CUDA build
+
+`CUDA_VARIANT` picks which `download.pytorch.org/whl/<tag>` index the image installs from. ComfyUI ≥ v0.24.1 requires torch ≥ 2.8, so the old `cu124` tag (capped at torch 2.6) will boot but logs `Unsupported Pytorch` warnings and disables DynamicVRAM / optimized CUDA ops.
+
+| Tag | Torch range | Driver | Notes |
+|---|---|---|---|
+| `cu126` | 2.6 – 2.9 | ~R555+ | Oldest driver that still gets current torch |
+| `cu128` | 2.7 – 2.9 | ~R570+ | **Default** — broad compatibility |
+| `cu130` | 2.9+ | ~R580+ | Newest GPUs only |
+
+Switching variants requires a clean rebuild: `docker compose build --no-cache`.
 
 ### VRAM Modes
 

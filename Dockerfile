@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ARG UID=1000
 ARG GID=1000
-ARG CUDA_VARIANT=cu124
+ARG CUDA_VARIANT=cu128
 
 RUN groupadd -g "${GID}" comfyui && \
     useradd -m -u "${UID}" -g comfyui -s /bin/bash comfyui
@@ -30,10 +30,10 @@ RUN git init && \
     git remote add origin https://github.com/comfyanonymous/ComfyUI.git && \
     git fetch --depth 1 origin tag "${COMFYUI_VERSION}" && \
     git checkout -b master tags/"${COMFYUI_VERSION}" && \
-    pip install --no-cache-dir \
+    pip install --no-cache-dir --root-user-action=ignore \
         torch torchvision torchaudio --index-url https://download.pytorch.org/whl/${CUDA_VARIANT} && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir GitPython openai-agents && \
+    pip install --no-cache-dir --root-user-action=ignore -r requirements.txt && \
+    pip install --no-cache-dir --root-user-action=ignore GitPython openai-agents && \
     chown -R comfyui:comfyui /comfyui /usr/local/lib/python3.11/site-packages /usr/local/bin
 
 COPY --chown=root:root docker-entrypoint.sh /docker-entrypoint.sh
