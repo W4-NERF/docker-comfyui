@@ -8,8 +8,12 @@ services:
         GID: ${COMFYUI_GID:-1000}
     container_name: comfyui
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     ports:
-      - "${COMFYUI_PORT:-8188}:8188"
+      # Loopback by default. To expose on your LAN, set BIND_ADDR=0.0.0.0 in
+      # .env — but then put a reverse proxy with auth in front of it.
+      - "${BIND_ADDR:-127.0.0.1}:${COMFYUI_PORT:-8188}:8188"
     environment:
       - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
       - COMFYUI_EXTRA_ARGS=${COMFYUI_EXTRA_ARGS:-}
