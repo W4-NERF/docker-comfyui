@@ -139,6 +139,7 @@ data/models/
 | `SafetensorError: header too large` | Model file truncated/corrupted | Re-download the file |
 | `ModuleNotFoundError: No module named 'agents'` | ComfyUI-Copilot dependency missing | `pip install openai-agents` in container |
 | Permission errors on volume mounts | UID/GID mismatch | Match `COMFYUI_UID` to your host user ID |
+| `Unsupported Pytorch` / `cu130 or higher` warnings | `CUDA_VARIANT=cu124` (torch capped at 2.6) | Set `CUDA_VARIANT=cu128` in `.env` and `docker compose build --no-cache` |
 
 ## Disclaimer
 

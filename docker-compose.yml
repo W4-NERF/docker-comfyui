@@ -6,7 +6,7 @@ services:
         COMFYUI_VERSION: ${COMFYUI_VERSION:-v0.24.1}
         UID: ${COMFYUI_UID:-1000}
         GID: ${COMFYUI_GID:-1000}
-        CUDA_VARIANT: ${CUDA_VARIANT:-cu124}
+        CUDA_VARIANT: ${CUDA_VARIANT:-cu128}
     container_name: comfyui
     restart: unless-stopped
     security_opt:

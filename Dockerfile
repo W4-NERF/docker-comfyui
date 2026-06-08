@@ -27,6 +27,8 @@ WORKDIR /comfyui
 
 # Shallow-clone the tag, then create a local master branch so Manager's
 # "checkout master" for updates doesn't fail (shallow clones lack branches).
+# Install torch *before* requirements.txt so the CUDA-specific index is used
+# for the torch wheel; requirements.txt then resolves remaining deps from PyPI.
 RUN git init && \
     git remote add origin https://github.com/comfyanonymous/ComfyUI.git && \
     git fetch --depth 1 origin tag "${COMFYUI_VERSION}" && \
