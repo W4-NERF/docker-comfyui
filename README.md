@@ -6,7 +6,7 @@ A containerized [ComfyUI](https://github.com/comfyanonymous/ComfyUI) stack with 
 
 ```bash
 # Clone and enter
-git clone https://github.com/YOUR_USER/docker-comfyui.git
+git clone https://github.com/W4-NERF/docker-comfyui.git
 cd docker-comfyui
 
 # Configure
