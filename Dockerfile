@@ -1,7 +1,7 @@
 # Stage 1: base
 FROM python:3.11-slim AS base
 
-ARG COMFYUI_VERSION
+ARG COMFYUI_VERSION=v0.24.1
 ENV COMFYUI_VERSION=${COMFYUI_VERSION}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -11,12 +11,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     gosu \
     libgl1 \
-    libglib2.0-0t64 \
+    libglib2.0-0 \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 ARG UID=1000
 ARG GID=1000
+ARG CUDA_VARIANT=cu124
 
 RUN groupadd -g "${GID}" comfyui && \
     useradd -m -u "${UID}" -g comfyui -s /bin/bash comfyui
@@ -30,11 +31,10 @@ RUN git init && \
     git fetch --depth 1 origin tag "${COMFYUI_VERSION}" && \
     git checkout -b master tags/"${COMFYUI_VERSION}" && \
     pip install --no-cache-dir \
-        torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 && \
+        torch torchvision torchaudio --index-url https://download.pytorch.org/whl/${CUDA_VARIANT} && \
     pip install --no-cache-dir -r requirements.txt && \
     pip install --no-cache-dir GitPython openai-agents && \
-    chown -R comfyui:comfyui /comfyui && \
-    chown -R comfyui:comfyui /usr/local
+    chown -R comfyui:comfyui /comfyui /usr/local/lib/python3.11/site-packages /usr/local/bin
 
 COPY --chown=root:root docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
@@ -42,6 +42,6 @@ RUN chmod +x /docker-entrypoint.sh
 EXPOSE 8188
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
-    CMD curl -f http://localhost:8188/ || exit 1
+    CMD curl -f http://localhost:8188/system_stats || exit 1
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

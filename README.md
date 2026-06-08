@@ -67,11 +67,12 @@ Set `COMFYUI_EXTRA_ARGS` to control GPU memory usage:
 ## Usage
 
 ```bash
-make start      # Start container
-make stop       # Stop container
-make logs       # Follow logs
+make up         # Build & start container
+make down       # Stop & remove container
 make restart    # Restart container
-make exec       # Open shell inside container
+make logs       # Follow logs
+make shell      # Open a shell inside the container
+make exec c="…" # Run a command inside the container
 make backup     # Backup data directory
 make status     # Check container status
 ```

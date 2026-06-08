@@ -5,11 +5,13 @@ COMFYUI_DIR="/comfyui"
 MANAGER_DIR="${COMFYUI_DIR}/custom_nodes/ComfyUI-Manager"
 DATA_DIRS=("models" "output" "custom_nodes" "user_data")
 
-# Ensure data directories exist with correct ownership
+# Ensure data directories exist with correct ownership.
+# Only chown the top-level data dirs (not -R) — a recursive chown over a
+# multi-hundred-GB models/ bind-mount on every start is brutally slow.
 for dir in "${DATA_DIRS[@]}"; do
     mkdir -p "${COMFYUI_DIR}/${dir}"
+    chown comfyui:comfyui "${COMFYUI_DIR}/${dir}"
 done
-chown -R comfyui:comfyui "${COMFYUI_DIR}"
 
 # Install / update ComfyUI Manager
 if [ ! -d "$MANAGER_DIR/.git" ]; then
@@ -54,4 +56,4 @@ echo "[entrypoint] Starting ComfyUI..."
 exec gosu comfyui python /comfyui/main.py \
     --listen 0.0.0.0 \
     --port 8188 \
-    $COMFYUI_EXTRA_ARGS
+    ${COMFYUI_EXTRA_ARGS:-}

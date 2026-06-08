@@ -1,12 +1,33 @@
 # Sensitive / environment
 .env
+.env.local
+.env.*.local
 
 # Data directories
 data/
+backups/
 
-# Git
+# Local compose overrides
+docker-compose.override.yml
+docker-compose.override.yaml
+
+# Editors / IDEs
 *.swp
 *.swo
 *~
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
+
+# AI tooling — user-local state, never the shared config
+.claude/settings.local.json
+.claude/.credentials.json
+.claude/projects/
+.claude/shell-snapshots/
+.claude/statsig/
+.claude/todos/
+.opencode/
+.aider*
+.cursor/
+.continue/

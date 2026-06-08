@@ -1,0 +1,24 @@
+# Persistent data — never ship into the build context.
+data/
+backups/
+
+# VCS / editor noise
+.git/
+.gitignore
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Local env
+.env
+
+# AI tooling state — never ship into the image
+.claude/
+.opencode/
+.aider*
+.cursor/
+.continue/
+CLAUDE.md
+AGENTS.md
