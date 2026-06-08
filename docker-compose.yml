@@ -1,0 +1,39 @@
+services:
+  comfyui:
+    build:
+      context: .
+      args:
+        COMFYUI_VERSION: ${COMFYUI_VERSION:-v0.24.1}
+        UID: ${COMFYUI_UID:-1000}
+        GID: ${COMFYUI_GID:-1000}
+    container_name: comfyui
+    restart: unless-stopped
+    ports:
+      - "${COMFYUI_PORT:-8188}:8188"
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
+      - COMFYUI_EXTRA_ARGS=${COMFYUI_EXTRA_ARGS:-}
+    volumes:
+      - ${MODELS_PATH:-./data/models}:/comfyui/models
+      - ${OUTPUT_PATH:-./data/output}:/comfyui/output
+      - ${CUSTOM_NODES_PATH:-./data/custom_nodes}:/comfyui/custom_nodes
+      - ${USER_DATA_PATH:-./data/user_data}:/comfyui/user_data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      - ${DOCKER_NETWORK:-comfyui-net}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  comfyui-net:
+    name: ${DOCKER_NETWORK:-comfyui-net}
+    driver: bridge

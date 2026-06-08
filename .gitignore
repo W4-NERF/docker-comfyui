@@ -1,0 +1,12 @@
+# Sensitive / environment
+.env
+
+# Data directories
+data/
+
+# Git
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
