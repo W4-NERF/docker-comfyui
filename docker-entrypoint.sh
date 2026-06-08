@@ -21,10 +21,10 @@ if [ ! -d "$MANAGER_DIR/.git" ]; then
 fi
 
 # Always ensure dependencies are installed (survives image rebuilds)
-gosu comfyui pip install --no-cache-dir -r "$MANAGER_DIR/requirements.txt" 2>/dev/null || true
+gosu comfyui pip install --no-cache-dir --disable-pip-version-check -r "$MANAGER_DIR/requirements.txt" 2>/dev/null || true
 
 # Ensure openai-agents is available for ComfyUI-Copilot (survives container recreation)
-gosu comfyui pip install --no-cache-dir openai-agents 2>/dev/null || true
+gosu comfyui pip install --no-cache-dir --disable-pip-version-check openai-agents 2>/dev/null || true
 
 # Seed Manager config so missing-nodes detection works immediately
 MANAGER_STORE="${COMFYUI_DIR}/user_data/__manager"

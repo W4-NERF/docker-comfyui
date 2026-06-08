@@ -6,6 +6,7 @@ ENV COMFYUI_VERSION=${COMFYUI_VERSION}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
@@ -30,10 +31,10 @@ RUN git init && \
     git remote add origin https://github.com/comfyanonymous/ComfyUI.git && \
     git fetch --depth 1 origin tag "${COMFYUI_VERSION}" && \
     git checkout -b master tags/"${COMFYUI_VERSION}" && \
-    pip install --no-cache-dir --root-user-action=ignore \
+    pip install --no-cache-dir --root-user-action=ignore --disable-pip-version-check \
         torch torchvision torchaudio --index-url https://download.pytorch.org/whl/${CUDA_VARIANT} && \
-    pip install --no-cache-dir --root-user-action=ignore -r requirements.txt && \
-    pip install --no-cache-dir --root-user-action=ignore GitPython openai-agents && \
+    pip install --no-cache-dir --root-user-action=ignore --disable-pip-version-check -r requirements.txt && \
+    pip install --no-cache-dir --root-user-action=ignore --disable-pip-version-check GitPython openai-agents && \
     chown -R comfyui:comfyui /comfyui /usr/local/lib/python3.11/site-packages /usr/local/bin
 
 COPY --chown=root:root docker-entrypoint.sh /docker-entrypoint.sh
