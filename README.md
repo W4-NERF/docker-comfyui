@@ -125,6 +125,26 @@ data/models/
 | `ModuleNotFoundError: No module named 'agents'` | ComfyUI-Copilot dependency missing | `pip install openai-agents` in container |
 | Permission errors on volume mounts | UID/GID mismatch | Match `COMFYUI_UID` to your host user ID |
 
+## Disclaimer
+
+This stack is provided **as-is**. It's a convenience wrapper, not a hardened appliance.
+
+- **No guarantees** — not of functionality, not of security, not of fitness for any
+  purpose. It works on my machine. That is the full extent of the promise.
+- **Hardening is a starting point, not a finish line.** The defaults bind ComfyUI to
+  `127.0.0.1` and run the app as a non-root user, but that does not make it "secure."
+  If you expose this beyond localhost, put it behind a reverse proxy with
+  authentication, review the ComfyUI-Manager `security_level`, and harden the host
+  and container to your own requirements.
+- **ComfyUI-Manager can execute arbitrary code** — installing a custom node runs
+  whatever that node ships. Only install nodes you trust, and never expose the UI to
+  an untrusted network.
+- **You run it, you own it.** Back up your own data, vet your own models and nodes,
+  and understand what you're deploying. Everyone for themselves.
+
+See [LICENSE](./LICENSE) for the formal terms (MIT — which already disclaims warranty,
+this section just says it in plain language).
+
 ## License
 
 MIT
