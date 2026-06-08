@@ -14,7 +14,7 @@ cp .env.example .env
 # Edit .env to match your paths and preferences
 
 # Start
-make start
+make up
 ```
 
 ComfyUI will be available at `http://localhost:8188`.
