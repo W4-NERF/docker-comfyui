@@ -9,7 +9,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
-    sudo \
+    gosu \
     libgl1 \
     libglib2.0-0t64 \
     ffmpeg \
