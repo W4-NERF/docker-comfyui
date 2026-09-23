@@ -19,10 +19,16 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: Dockerfile
-          # DL3008/DL3018: intentionally not pinning apt package versions
-          # (Debian bookworm's repo already pins the ABI; see README for the
-          # torch/CUDA pinning story, which is what actually needs care here).
-          ignore: DL3008
+          # DL3008: intentionally not pinning apt package versions (Debian
+          # bookworm's repo already pins the ABI).
+          # DL3013: the torch/GitPython/openai-agents installs are
+          # deliberately unpinned by default — see TORCH_PACKAGES /
+          # OPENAI_AGENTS_PACKAGE in this Dockerfile and the "Pinning
+          # torch / Manager / openai-agents" section in the README.
+          # (hadolint-action's `ignore` input takes a comma-separated list on
+          # one line, not a YAML block scalar — a multi-line list is silently
+          # not applied.)
+          ignore: DL3008,DL3013
 
   shellcheck:
     name: Lint shell scripts

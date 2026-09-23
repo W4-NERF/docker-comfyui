@@ -69,6 +69,7 @@ fi
 echo "[entrypoint] Starting ComfyUI..."
 # --listen 0.0.0.0 is correct here: it binds *inside* the container so Docker's
 # port mapping works. Host-side exposure is controlled by BIND_ADDR in compose.
+# shellcheck disable=SC2086 # intentionally unquoted: COMFYUI_EXTRA_ARGS can carry multiple flags (e.g. "--lowvram --disable-smart-memory")
 exec gosu comfyui python /comfyui/main.py \
     --listen 0.0.0.0 \
     --port 8188 \
