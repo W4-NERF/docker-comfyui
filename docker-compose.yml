@@ -7,6 +7,10 @@ services:
         UID: ${COMFYUI_UID:-1000}
         GID: ${COMFYUI_GID:-1000}
         CUDA_VARIANT: ${CUDA_VARIANT:-cu128}
+        # Pinning knobs — see .env.example. Defaults reproduce the previous
+        # unpinned behavior.
+        TORCH_PACKAGES: ${TORCH_PACKAGES:-torch torchvision torchaudio}
+        OPENAI_AGENTS_PACKAGE: ${OPENAI_AGENTS_PACKAGE:-openai-agents}
     container_name: comfyui
     restart: unless-stopped
     security_opt:
@@ -18,6 +22,7 @@ services:
     environment:
       - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
       - COMFYUI_EXTRA_ARGS=${COMFYUI_EXTRA_ARGS:-}
+      - COMFYUI_MANAGER_REF=${COMFYUI_MANAGER_REF:-}
     volumes:
       - ${MODELS_PATH:-./data/models}:/comfyui/models
       - ${OUTPUT_PATH:-./data/output}:/comfyui/output

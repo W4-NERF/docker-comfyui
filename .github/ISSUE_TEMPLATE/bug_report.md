@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Something in the container/build/entrypoint is broken
 title: ''
 labels: ''
 assignees: ''
@@ -8,31 +8,26 @@ assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+A clear and concise description of what's wrong.
 
 **To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Steps to reproduce, e.g.:
+1. Set these values in `.env`: ...
+2. Run `make up` (or `docker compose up --build`)
+3. See error
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+What you expected to happen instead.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Environment**
+ - Host OS: [e.g. Ubuntu 22.04]
+ - GPU / driver version: [e.g. RTX 4090, driver 575.x — `nvidia-smi`]
+ - Docker version: [`docker --version`]
+ - `docker compose` version: [`docker compose version`]
+ - Relevant `.env` values: `COMFYUI_VERSION`, `CUDA_VARIANT`, `COMFYUI_EXTRA_ARGS` (omit anything sensitive)
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+**Logs**
+Output of `docker compose logs comfyui` (or `make logs`) around the failure. Please paste as text, not a screenshot.
 
 **Additional context**
-Add any other context about the problem here.
+Anything else that might be relevant (custom nodes installed, model sizes, etc.).
