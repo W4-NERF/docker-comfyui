@@ -32,7 +32,7 @@ ARG OPENAI_AGENTS_PACKAGE="openai-agents"
 ENV OPENAI_AGENTS_PACKAGE=${OPENAI_AGENTS_PACKAGE}
 
 RUN groupadd -g "${GID}" comfyui && \
-    useradd -m -u "${UID}" -g comfyui -s /bin/bash comfyui
+    useradd -l -m -u "${UID}" -g comfyui -s /bin/bash comfyui
 
 WORKDIR /comfyui
 
