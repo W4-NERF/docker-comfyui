@@ -1,5 +1,7 @@
 # docker-comfyui
 
+[![CI](https://github.com/W4-NERF/docker-comfyui/actions/workflows/ci.yml/badge.svg)](https://github.com/W4-NERF/docker-comfyui/actions/workflows/ci.yml)
+
 A containerized [ComfyUI](https://github.com/comfyanonymous/ComfyUI) stack with GPU passthrough, [ComfyUI-Manager](https://github.com/ltdrdata/ComfyUI-Manager), and one-command management via Docker Compose.
 
 ## Quick Start
@@ -69,6 +71,18 @@ Edit `.env` to set:
 | `cu130` | 2.9+ | ~R580+ | Newest GPUs only |
 
 Switching variants requires a clean rebuild: `docker compose build --no-cache`.
+
+### Pinning torch / Manager / openai-agents
+
+By default, `torch`/`torchvision`/`torchaudio`, `openai-agents`, and ComfyUI-Manager (on first install) all resolve to their latest compatible version at build/first-run time. That's convenient, but it means a `--no-cache-dir` rebuild or a fresh Manager clone can silently pull a version that doesn't get along with the `COMFYUI_VERSION` you've pinned. If that happens, freeze known-good versions via `.env` (see the commented-out examples in `.env.example`):
+
+| Variable | Applies at | Description |
+|---|---|---|
+| `TORCH_PACKAGES` | build | Full pip specs for the torch stack, e.g. `torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0` |
+| `OPENAI_AGENTS_PACKAGE` | build (+ every container start) | Pip spec for the Copilot dependency, e.g. `openai-agents==0.5.0` |
+| `COMFYUI_MANAGER_REF` | first Manager install only | A ComfyUI-Manager git tag/branch/commit |
+
+Changing `TORCH_PACKAGES` or `OPENAI_AGENTS_PACKAGE` requires `docker compose build`. `COMFYUI_MANAGER_REF` only takes effect the first time Manager is cloned — it won't move an already-installed checkout.
 
 ### VRAM Modes
 
