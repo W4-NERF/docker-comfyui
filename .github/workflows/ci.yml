@@ -25,9 +25,10 @@ jobs:
           # deliberately unpinned by default — see TORCH_PACKAGES /
           # OPENAI_AGENTS_PACKAGE in this Dockerfile and the "Pinning
           # torch / Manager / openai-agents" section in the README.
-          ignore: |
-            DL3008
-            DL3013
+          # (hadolint-action's `ignore` input takes a comma-separated list on
+          # one line, not a YAML block scalar — a multi-line list is silently
+          # not applied.)
+          ignore: DL3008,DL3013
 
   shellcheck:
     name: Lint shell scripts
