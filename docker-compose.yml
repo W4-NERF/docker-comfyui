@@ -11,6 +11,7 @@ services:
         # unpinned behavior.
         TORCH_PACKAGES: ${TORCH_PACKAGES:-torch torchvision torchaudio}
         OPENAI_AGENTS_PACKAGE: ${OPENAI_AGENTS_PACKAGE:-openai-agents}
+        TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/${CUDA_VARIANT:-cu128}}
     container_name: comfyui
     restart: unless-stopped
     security_opt:

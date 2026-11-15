@@ -25,6 +25,11 @@ ARG CUDA_VARIANT=cu128
 # — to stop a `docker compose build --no-cache` from silently jumping to a
 # newer torch that the pinned COMFYUI_VERSION doesn't support yet.
 ARG TORCH_PACKAGES="torch torchvision torchaudio"
+# Index for the torch stack. Default: PyTorch's CUDA-specific index. Its
+# nvidia-* deps are served from pypi.nvidia.com, which can be very slow; set
+# TORCH_INDEX_URL=https://pypi.org/simple to use PyPI's default CUDA build
+# (CUDA_VARIANT is then ignored).
+ARG TORCH_INDEX_URL="https://download.pytorch.org/whl/${CUDA_VARIANT}"
 # Same idea for ComfyUI-Copilot's dependency, e.g. --build-arg OPENAI_AGENTS_PACKAGE="openai-agents==0.x.y".
 # Exported as ENV so the entrypoint's runtime reinstall (survives container
 # recreation) honors the same pin instead of drifting back to latest.
@@ -45,7 +50,7 @@ RUN git init && \
     git fetch --depth 1 origin tag "${COMFYUI_VERSION}" && \
     git checkout -b master tags/"${COMFYUI_VERSION}" && \
     pip install --no-cache-dir --root-user-action=ignore --disable-pip-version-check \
-        ${TORCH_PACKAGES} --index-url https://download.pytorch.org/whl/${CUDA_VARIANT} && \
+        ${TORCH_PACKAGES} --index-url "${TORCH_INDEX_URL}" && \
     pip install --no-cache-dir --root-user-action=ignore --disable-pip-version-check -r requirements.txt && \
     pip install --no-cache-dir --root-user-action=ignore --disable-pip-version-check GitPython ${OPENAI_AGENTS_PACKAGE} && \
     chown -R comfyui:comfyui /comfyui /usr/local/lib/python3.11/site-packages /usr/local/bin
